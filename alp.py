@@ -14,6 +14,15 @@ class Alp:
 
         type(self)._lib = CDLL(library_path)
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, e_type, e_value, e_trace):
+        self.close()
+
+    def close(self):
+        type(self)._lib = None
+
     def _call(self, func_name, *args):
         ret = self._lib[func_name](*args)
 
@@ -45,6 +54,15 @@ class AlpDevice:
             "AlpProjControl",
             self._id, param, value
         )
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, e_type, e_value, e_trace):
+        self.close()
+
+    def close(self):
+        self._alp._call("AlpDevFree", self._id)
 
     def get_display_size(self):
         width = self._inquire(ALP_DEV_DISPLAY_WIDTH).value
@@ -95,6 +113,12 @@ class AlpSequence:
             "AlpSeqControl",
             self._dev._id, self._id, param, value
         )
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self):
+        self.free()
 
     def free(self):
         self._alp._call("AlpSeqFree", self._dev._id, self._id)
