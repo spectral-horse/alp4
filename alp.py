@@ -1,6 +1,7 @@
 from .error import AlpError
 from ._consts import *
 from ctypes import CDLL, c_long, c_void_p, byref
+from pathlib import Path
 import numpy as np
 
 
@@ -8,11 +9,25 @@ import numpy as np
 class Alp:
     _lib = None
 
-    def __init__(self, library_path):
+    def __init__(self, library_path = None):
         if self._lib is not None:
             raise RuntimeError("ALP already initialised")
 
-        type(self)._lib = CDLL(library_path)
+        if library_path is None:
+            paths = Path("/").glob("Program Files*/ALP*/**/alp*.dll")
+            fail_msg = "could not load any ALP libraries discovered" 
+        else:
+            paths = [library_path]
+            fail_msg = "could not load ALP library given"
+
+        for path in paths:
+            try:
+                type(self)._lib = CDLL(path)
+                break
+            except OSError:
+                pass
+        else:
+            raise RuntimeError(fail_msg)
 
     def __enter__(self):
         return self
