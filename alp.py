@@ -77,6 +77,7 @@ class AlpDevice:
         self.close()
 
     def close(self):
+        self.halt()
         self._alp._call("AlpDevFree", self._id)
 
     def get_display_size(self):
@@ -116,13 +117,6 @@ class AlpDevice:
         self._control(ALP_PROJ_STEP, trigger_type.value)
 
 class AlpSequence:
-    _formats = {
-        "msb_align": ALP_DATA_MSB_ALIGN,
-        "lsb_align": ALP_DATA_LSB_ALIGN,
-        "binary_topdown": ALP_DATA_BINARY_TOPDOWN,
-        "binary_bottomup": ALP_DATA_BINARY_BOTTOMUP
-    }
-
     def _control(self, param, value):
         self._alp._call(
             "AlpSeqControl",
@@ -132,10 +126,11 @@ class AlpSequence:
     def __enter__(self):
         return self
 
-    def __exit__(self):
+    def __exit__(self, e_type, e_value, e_trace):
         self.free()
 
     def free(self):
+        self._dev.halt()
         self._alp._call("AlpSeqFree", self._dev._id, self._id)
 
     def set_timing(
@@ -151,12 +146,7 @@ class AlpSequence:
         )
 
     def set_format(self, fmt):
-        fmt = self._formats.get(fmt)
-
-        if fmt is None:
-            raise ValueError("valid formats are "+", ".join(_formats.keys()))
-
-        self._control(ALP_DATA_FORMAT, fmt)
+        self._control(ALP_DATA_FORMAT, fmt.value)
 
     def put(self, offset, n, data):
         data = np.ascontiguousarray(data)
