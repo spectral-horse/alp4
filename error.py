@@ -20,7 +20,7 @@ class AlpError(RuntimeError):
     }
 
     def __init__(self, code):
-        if code == _ALP_OK.value:
+        if code == 0:
             raise ValueError("code 0 is ALP_OK, not an error")
 
         super().__init__(self._err_codes.get(code, "UNKNOWN"))
