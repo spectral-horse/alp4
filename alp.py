@@ -1,5 +1,6 @@
 from .error import AlpError
 from ._consts import *
+from ._structs import *
 from ctypes import CDLL, c_long, c_void_p, byref
 from pathlib import Path
 import numpy as np
@@ -85,6 +86,16 @@ class AlpDevice:
         height = self._inquire(ALP_DEV_DISPLAY_HEIGHT).value
 
         return width, height
+
+    def get_proj_progress(self):
+        info = AlpProjProgress()
+
+        self._alp._call(
+            "AlpProjInquireEx",
+            self._id, ALP_PROJ_PROGRESS, byref(info)
+        )
+
+        return info
 
     def allocate_sequence(self, bitplanes, images):
         seq = AlpSequence()
