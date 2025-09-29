@@ -160,7 +160,7 @@ class AlpSequence:
         self._control(ALP_DATA_FORMAT, fmt.value)
 
     def put(self, offset, n, data):
-        data = np.ascontiguousarray(data)
+        data = np.ascontiguousarray(data, dtype = "u1")
 
         self._alp._call(
             "AlpSeqPut",

@@ -34,7 +34,7 @@ with alp.open_device() as dmd:
         # Upload the 1st image as a simple one-byte-per-pixel array
         seq.set_format(AlpDataFormat.LSB_ALIGN)
         seq.set_timing(picture = 1_000_000)     # 10^6 us = 1 second
-        seq.put(0, 1, circle.astype("u1"))      # Upload 1 image at the start
+        seq.put(0, 1, circle)                   # Upload 1 image at the start
         seq.start(continuous = True)            # Run indefinitely
 
         input("Projecting 1st image - enter anything to move to 2nd image")
