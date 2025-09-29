@@ -54,6 +54,10 @@ with alp.open_device() as dmd:
 # Explicit halt/free/close calls can be made if not using a context manager.
 ```
 
+<img src="example.gif" align="right">
+
+This produces the result shown on the right!
+
 If you don't like having to nest multiple with-statements, you can use python's
 built-in `ExitStack`. This is especially useful if you're using other libraries that
 also want you to use with-statement context management. An `ExitStack` lets you reduce
