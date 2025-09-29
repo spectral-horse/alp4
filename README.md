@@ -54,7 +54,7 @@ with alp.open_device() as dmd:
 # Explicit halt/free/close calls can be made if not using a context manager.
 ```
 
-<img src="example.gif" align="right">
+<img src="example.gif" align="right" width="200">
 
 This produces the result shown on the right!
 
@@ -62,6 +62,8 @@ If you don't like having to nest multiple with-statements, you can use python's
 built-in `ExitStack`. This is especially useful if you're using other libraries that
 also want you to use with-statement context management. An `ExitStack` lets you reduce
 all of that down to just 1 with-statement.
+
+<br/>
 
 ## Requirements
 
@@ -78,3 +80,4 @@ Download this project directory and put it wherever you will be running your cod
 
 All of the code here was written by me. I used the C header `alp.h` and the PDF documentation supplied with ALP-4.3 to develop this package.
 If you use this package in your work, please cite this github repository!
+
